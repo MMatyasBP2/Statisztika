@@ -1,0 +1,33 @@
+% Beállítjuk a rulett számait és valószínűségeit
+szamok = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36,
+          11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22,
+          18, 29, 7, 28, 12, 35, 3, 26];
+valoszinusegek = [2.7, 8.1, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2,
+                 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2,
+                 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4, 7.2, 5.4];
+
+% Elkészítjük a rulett kereket
+rulett = [];
+for i = 1:length(szamok)
+    rulett = [rulett, repmat(szamok(i), 1, valoszinusegek(i)*10)];
+end
+
+% Megkezdjük a szimulációt
+pontok = zeros(1, length(szamok));
+for i = 1:1000 % Itt 1000 alkalommal forog a rulett
+    % Véletlenszerűen választunk egy számot a keréken
+    index = randi(length(rulett));
+    szam = rulett(index);
+    
+    % Frissítjük a pontokat
+    pontok(szam == szamok) = pontok(szam == szamok) + 1;
+    
+    % Megjelenítjük a jelenlegi állapotot
+    fprintf('A %d számra eddig %d alkalommal esett a labda.\n', szam, pontok(szam == szamok));
+end
+
+% Kirajzoljuk a pontokat
+bar(szamok, pontok);
+xlabel('Szám');
+ylabel('Gyakoriság');
+title('Rulett szimuláció');
