@@ -1,43 +1,35 @@
-num_simulations = 100;
-num_spins = 100;
-bet_amount = 10;
-bet_on_red = true;
+% Rulett szimuláció
 
-money = zeros(num_simulations, num_spins);
-money(:,1) = 1000;
+% Előkészítés
+clear;
+clc;
 
-for i = 1:num_simulations
-    for j = 2:num_spins
-        if bet_on_red
-            bet_color = 'Red';
-        else
-            bet_color = 'Black';
-        end
-        money(i,j) = money(i,j-1) - bet_amount;
-        
-        result = roulette_spin();
-        if strcmpi(result.Color, bet_color)
-            money(i,j) = money(i,j) + bet_amount * 2;
-        end
-    end
-end
+% Paraméterek
+money = 1; % Pénzösszeg
+p_red = 18/38; % A piros színre való fogadás valószínűsége
+num_spins = 1000; % Pörgetések száma
 
+% Rulett szimuláció
+results = randsample({'red','black'}, num_spins, true, [p_red, 1-p_red]);
+
+% Pénzösszeg változása az idő függvényében
+money_vec = cumsum(2*money*(strcmp(results,'red')-0.5));
+
+% Normális eloszlás illesztése
+mu = mean(money_vec);
+sigma = std(money_vec);
+x = -100:0.1:100;
+y = normpdf(x,mu,sigma);
+
+% Ábra
 figure;
-plot(1:num_spins, mean(money));
-xlabel('Pörgetések száma');
-ylabel('Átlagos pénzösszeg');
-title(['Átlagos pénzösszeg a(z) ' num2str(num_simulations) ' szimuláció után']);
+histogram(money_vec,50,'Normalization','pdf');
+hold on;
+plot(x,y,'r','LineWidth',2);
+plot([mu mu], [0 max(y)], 'g--','LineWidth',2);
+xlabel('Pénzösszeg');
+ylabel('Relatív gyakoriság');
+title('Rulett szimuláció');
 
-function result = roulette_spin()
-    numbers = 0:36;
-    colors = {'Red', 'Black'};
-    probabilities = [18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 18/37 2/37];
-    result.Number = randsample(numbers, 1, true, probabilities);
-    if result.Number == 0
-        result.Color = 'Green';
-    elseif mod(result.Number, 2) == 0
-        result.Color = colors{2};
-    else
-        result.Color = colors{1};
-    end
-end
+% Ábrázolás
+hold off;
