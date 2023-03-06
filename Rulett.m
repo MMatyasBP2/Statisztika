@@ -1,17 +1,13 @@
-% Beállítások
-num_simulations = 100;  % Szimulációk száma
-num_spins = 100;  % Pörgetések száma
-bet_amount = 10;  % Tét összege
-bet_on_red = true;  % Fogadás színe: true = piros, false = fekete
+num_simulations = 100;
+num_spins = 100;
+bet_amount = 10;
+bet_on_red = true;
 
-% Inicializálás
 money = zeros(num_simulations, num_spins);
-money(:,1) = 1000;  % Kezdõ pénzösszeg
+money(:,1) = 1000;
 
-% Szimuláció
 for i = 1:num_simulations
     for j = 2:num_spins
-        % Fogadás
         if bet_on_red
             bet_color = 'Red';
         else
@@ -19,7 +15,6 @@ for i = 1:num_simulations
         end
         money(i,j) = money(i,j-1) - bet_amount;
         
-        % Pörgetés
         result = roulette_spin();
         if strcmpi(result.Color, bet_color)
             money(i,j) = money(i,j) + bet_amount * 2;
@@ -27,14 +22,12 @@ for i = 1:num_simulations
     end
 end
 
-% Eredmények ábrázolása
 figure;
 plot(1:num_spins, mean(money));
-xlabel('Pörgetések száma');
-ylabel('Átlagos pénzösszeg');
-title(['Átlagos pénzösszeg a(z) ' num2str(num_simulations) ' szimuláció után']);
+xlabel('PÃ¶rgetÃ©sek szÃ¡ma');
+ylabel('Ãtlagos pÃ©nzÃ¶sszeg');
+title(['Ãtlagos pÃ©nzÃ¶sszeg a(z) ' num2str(num_simulations) ' szimulÃ¡ciÃ³ utÃ¡n']);
 
-% Roulette pörgetés függvény
 function result = roulette_spin()
     numbers = 0:36;
     colors = {'Red', 'Black'};
