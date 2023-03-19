@@ -51,14 +51,13 @@ title('Roulette simulation');
 legend('Normal', 'Normal (0 green)', 'Location', 'NorthWest');
 hold off;
 
-disp('Results for normal game:');
-disp(['Median: ' num2str(median(money_vec))]);
-disp(['Median absolute deviation: ' num2str(mad(money_vec, 1))]);
-disp(['Variance: ' num2str(var(money_vec))]);
-disp(['Mean: ' num2str(mean(money_vec))]);
+median_money = median(money_vec);
+mad_money = mad(money_vec, 1);
+variance_money = var(money_vec);
+mean_money = mean(money_vec);
 
-disp('Results for 0 green game:');
-disp(['Median: ' num2str(median(money_vec_zero_green))]);
-disp(['Median absolute deviation: ' num2str(mad(money_vec_zero_green, 1))]);
-disp(['Variance: ' num2str(var(money_vec_zero_green))]);
-disp(['Mean: ' num2str(mean(money_vec_zero_green))]);
+% eredmények kiírása az ábra mellé
+text(20, 0.015, sprintf('Median: %.2f', median_money));
+text(20, 0.03, sprintf('Median absolute deviation: %.2f', mad_money));
+text(20, 0.025, sprintf('Variance: %.2f', variance_money));
+text(20, 0.02, sprintf('Mean: %.2f', mean_money));
